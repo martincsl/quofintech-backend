@@ -14,56 +14,60 @@ module.exports = {
       .where ('customerId',customerId)
       .select ('*')
       .first ();
-
       if (! customer) {
-        console.log ("usuario no encontrado");
+        // console.log ("usuario no encontrado");
         return response.status(404).json({ error: 'Usuario no encontrado'});
       }
-      console.log ("usuario encontrado");
-      console.log (customer);
+      // console.log ("usuario encontrado");
+      // console.log (customer);
       return response.json(customer);
     } catch (error) {
-      next (error);
-  }
+        next (error);
+      }
   },
 
-  async create (request, response) {
-    const { customerId, customerName, customerBirthDate, customerMobilePrefix, customerMobile, customerEmail, customerCity, customerAddress, customerOccupation, customerLaborSeniority, customerSalary, customerHiringType } = request.body;
-    
-    await connection ('customers').insert({
-      customerId,
-      customerName, 
-      customerBirthDate, 
-      customerMobilePrefix, 
-      customerMobile, 
-      customerEmail, 
-      customerCity, 
-      customerAddress, 
-      customerOccupation, 
-      customerLaborSeniority, 
-      customerSalary, 
-      customerHiringType,
-    });
-    return response.json({customerId});
+  async create (request, response, next) {
+    try {
+      const { customerId, customerName, customerBirthDate, customerMobilePrefix, customerMobile, customerEmail, customerCity, customerAddress, customerOccupation, customerLaborSeniority, customerSalary, customerHiringType } = request.body;
+      await connection ('customers').insert({
+        customerId,
+        customerName, 
+        customerBirthDate, 
+        customerMobilePrefix, 
+        customerMobile, 
+        customerEmail, 
+        customerCity, 
+        customerAddress, 
+        customerOccupation, 
+        customerLaborSeniority, 
+        customerSalary, 
+        customerHiringType,
+      });
+      return response.json({customerId});
+    } catch (error) {
+        next (error);
+      }
   },
 
-  async update (request, response) {
-    const { customerId, customerMobilePrefix, customerMobile, customerEmail, customerCity, customerAddress, customerOccupation, customerLaborSeniority, customerSalary, customerHiringType } = request.body;
-    console.log (customerId);
-
-    await connection ('customers').update({
-      customerMobilePrefix, 
-      customerMobile, 
-      customerEmail, 
-      customerCity, 
-      customerAddress, 
-      customerOccupation, 
-      customerLaborSeniority, 
-      customerSalary, 
-      customerHiringType,
-    })
-    .where('customerId',customerId);
-    return response.json({customerId});
-  },
-
+  async update (request, response, next) {
+    try {
+      const { customerId, customerMobilePrefix, customerMobile, customerEmail, customerCity, customerAddress, customerOccupation, customerLaborSeniority, customerSalary, customerHiringType } = request.body;
+      // console.log (customerId);
+      await connection ('customers').update({
+        customerMobilePrefix, 
+        customerMobile, 
+        customerEmail, 
+        customerCity, 
+        customerAddress, 
+        customerOccupation, 
+        customerLaborSeniority, 
+        customerSalary, 
+        customerHiringType,
+      })
+      .where('customerId',customerId);
+      return response.json({customerId});
+    } catch (error) {
+        next (error);
+      }
+},
 }
