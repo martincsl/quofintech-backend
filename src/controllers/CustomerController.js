@@ -7,22 +7,29 @@ module.exports = {
   //   return response.json(customerList);
   // },
 
-  async getcustomer (request, response) {
-    
-    const customerId = request.headers.authorization;
-    const customer = await connection ('customers')
-    .where ('customerId',customerId)
-    .select ('*')
-    .first ();
+  async getcustomer (request, response, next) {
+    try {
+      const customerId = request.headers.authorization;
+      const customer = await connection ('customers')
+      .where ('customerId',customerId)
+      .select ('*')
+      .first ();
 
-    if (! customer) {
-      return response.status(404).json({ error: 'Usuario no encontrado'});
-    }
-    return response.json(customer);
+      if (! customer) {
+        console.log ("usuario no encontrado");
+        return response.status(404).json({ error: 'Usuario no encontrado'});
+      }
+      console.log ("usuario encontrado");
+      console.log (customer);
+      return response.json(customer);
+    } catch (error) {
+      next (error);
+  }
   },
 
   async create (request, response) {
     const { customerId, customerName, customerBirthDate, customerMobilePrefix, customerMobile, customerEmail, customerCity, customerAddress, customerOccupation, customerLaborSeniority, customerSalary, customerHiringType } = request.body;
+    
     await connection ('customers').insert({
       customerId,
       customerName, 
