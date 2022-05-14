@@ -44,6 +44,8 @@ module.exports = {
   async create (request, response, next) {
     try {
       const { companyId, companyName, companyPhone, companyMobilePrefix, companyMobile, companyAddress,  companyCity } = request.body;
+      // console.log(request.body);
+      // console.log(companyId);
       await connection ('companies').insert({
         companyId,
         companyName, 
